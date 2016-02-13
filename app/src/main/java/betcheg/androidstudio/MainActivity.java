@@ -33,11 +33,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    // L'objet qui contient les pages à défiler
     private static ViewPager mViewPager;
 
+    // Fonction perso pour changer la page du viewpager
     public static void changerItem() {
         mViewPager.setCurrentItem(2);
     }
@@ -50,14 +49,15 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
+        // Retourne le fragment concerné
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+        // On associe le ViewPager au SectionPagerAdapter
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        // On désactive la possibilité de sweep au doigt
         mViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        */
 
     }
 
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
             super(fm);
         }
 
+
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
@@ -119,42 +122,34 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Le nombre de vues disponible
             return 3;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-           /* switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            } */
-            return null;
-        }
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * Le fragment qui contient la vue
      */
     public static class PlaceholderFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
+
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
+
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
+            // On prepare une chaine à envoyer au fragment
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            // On lui passe en argument
             fragment.setArguments(args);
             return fragment;
         }
@@ -168,7 +163,9 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             Button btn_clic = (Button) rootView.findViewById(R.id.btn_clic);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            // On recupere l'argument qui a été passé, et on l'affiche dans un text view
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
             btn_clic.setOnClickListener(new Button.OnClickListener() {
                 public void onClick(View v) {
                     Log.i("test", "clic");
