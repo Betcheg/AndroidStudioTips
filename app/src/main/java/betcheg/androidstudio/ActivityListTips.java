@@ -1,56 +1,53 @@
 package betcheg.androidstudio;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+public class ActivityListTips extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_listtips);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ListView liste_category = (ListView) findViewById(R.id.listcategory);
-        String[] titreCategory = new String[]{ "Categorie 1", "Categorie 2 ", "Categorie 3" };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
+        ListView liste_category = (ListView) findViewById(R.id.listtips);
+        String[] titreCategory = new String[]{ "Tips 1", "Tips 2 ", "Tips 3" };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ActivityListTips.this,
                 android.R.layout.simple_list_item_1, titreCategory);
         liste_category.setAdapter(adapter);
 
+       // String tab[][] = getListeTipsFromJson();
+        getListeTipsFromJson();
         liste_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                Intent intent = new Intent(MainActivity.this, ActivityListTips.class);
-                //String message = "abc";
-                //intent.putExtra(EXTRA_MESSAGE, message);
+                Intent intent = new Intent(ActivityListTips.this, ActivityTips.class);
+                intent.putExtra("numero", position);
                 startActivity(intent);
-                Log.i("TEST",Integer.toString(position));
+                Log.i("TEST TIPS",Integer.toString(position));
             }
         });
     }
@@ -76,6 +73,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void  getListeTipsFromJson() {
+        String fichier = "";
+        String line;
+        InputStream inputStream = getApplicationContext().getResources().openRawResource(R.raw.category1);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                fichier = fichier.concat(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("fichier:", fichier);
+        try {
+
+            JSONObject json = new JSONObject(fichier);
+            JSONObject subJson = json.getJSONObject("1");
+
+            Log.i("json:", json.get("1").toString());
+            Log.i("json2 :", subJson.get("titre").toString());
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }

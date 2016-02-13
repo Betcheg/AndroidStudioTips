@@ -25,11 +25,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ListView
-        android:id="@+id/listcategory"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <TextView
+        android:id="@+id/numero"
+        android:text="vide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    </ListView>
+    <TextView
+        android:id="@+id/titre"
+        android:text="titre vide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
