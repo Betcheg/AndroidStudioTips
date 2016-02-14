@@ -13,25 +13,37 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ActivityTips extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Graphical
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tips);
-
-        Intent intent = getIntent();
-        int numero = intent.getIntExtra("numero", 99); // 99 = erreur
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent intent = getIntent();
 
         TextView t_numero = (TextView) findViewById(R.id.numero);
         TextView t_titre = (TextView) findViewById(R.id.titre);
+        JSONObject json = null;
 
-        t_numero.setText(Integer.toString(numero));
+        // Get informations
+        try {
+
+            json = new JSONObject(intent.getStringExtra("json"));
+            t_titre.setText(json.getString("titre"));
+            t_numero.setText(json.getString("url"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 

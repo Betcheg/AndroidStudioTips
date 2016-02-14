@@ -26,28 +26,49 @@ public class ActivityListTips extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Graphical
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listtips);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         ListView liste_category = (ListView) findViewById(R.id.listtips);
-        String[] titreCategory = new String[]{ "Tips 1", "Tips 2 ", "Tips 3" };
+
+        // Get Intent args
+        Intent intent = getIntent();
+        int catNumber = -1;
+        switch (intent.getIntExtra("category", -1))
+        {
+            case 0:
+                catNumber = R.raw.category1;
+                break;
+            case 1:
+                catNumber = R.raw.category2;
+                break;
+            case 2:
+                catNumber = R.raw.category3;
+                break;
+            default:
+                Log.i("Error", "Error reading cat number");
+        }
+        // Get Informations
+        final FileToJson fileToJson = new FileToJson(catNumber);
+        fileToJson.getJsonFromFile(getApplicationContext());
+
+
+        // Set adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(ActivityListTips.this,
-                android.R.layout.simple_list_item_1, titreCategory);
+                android.R.layout.simple_list_item_1, fileToJson.getTabAttribute("titre"));
         liste_category.setAdapter(adapter);
 
-       // String tab[][] = getListeTipsFromJson();
-        getListeTipsFromJson();
+
+        // Listen to clics
         liste_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 Intent intent = new Intent(ActivityListTips.this, ActivityTips.class);
-                intent.putExtra("numero", position);
+                intent.putExtra("json", fileToJson.getJsonWhereIdIs(position));
                 startActivity(intent);
-                Log.i("TEST TIPS",Integer.toString(position));
             }
         });
     }
@@ -75,33 +96,5 @@ public class ActivityListTips extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void  getListeTipsFromJson() {
-        String fichier = "";
-        String line;
-        InputStream inputStream = getApplicationContext().getResources().openRawResource(R.raw.category1);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        try {
-            while ((line = reader.readLine()) != null) {
-                fichier = fichier.concat(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Log.i("fichier:", fichier);
-        try {
-
-            JSONObject json = new JSONObject(fichier);
-            JSONObject subJson = json.getJSONObject("1");
-
-            Log.i("json:", json.get("1").toString());
-            Log.i("json2 :", subJson.get("titre").toString());
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

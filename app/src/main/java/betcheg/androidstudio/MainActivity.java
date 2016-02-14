@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
                 // -> String message = "abc";
                 // -> intent.putExtra("nom de la chaine", message);
 
+                // On passe en argument le numero cliqué
+                intent.putExtra("category", position);
+
                 // On démarre la nouvelle activitée
                 startActivity(intent);
 
